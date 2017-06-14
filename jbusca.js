@@ -1,24 +1,32 @@
 (function(){
 
-  function jBusca (seletor) {
-    this.elementos = document.querySelectorAll(seletor)
+  function buscaElemento(seletor) {
+    var elementos;
+    if(document.querySelectorAll) {
+      elementos = document.querySelectorAll(seletor);
+    }
+    // Outras verificações...
+    this.elementos = elementos
   }
 
-  jBusca.prototype.on = function(acao, funcao) {
-    for (var i = 0; i < this.elementos.length; i++) {
-      if(this.elementos[i].addEventListener) {
-        this.elementos[i].addEventListener(acao, funcao)	 			 
+  buscaElemento.prototype.adicionaEvento = function adicionaEvento(acao, funcao) {
+    var elementos = this.elementos
+    for(var i = 0; i < elementos.length; i++) {
+      if(elementos[i].addEventListener) {
+        elementos[i].addEventListener(acao, funcao);	 
       }
-      if(this.elementos[i].attachEvent) {
-        this.elementos[i].attachEvent('on' + acao, funcao )
+      if(elementos[i].attachEvent) {
+        elementos[i].attachEvent('on' + acao, funcao);	 	 
       }
     }
   }
 
-  function $(element) {
-    return new jBusca(element)
+  function $(selector) {
+    return new buscaElemento(selector)
   }
 
-  $('.elemento').on('click', function() { console.log('clicou!') } )
+  // Esse trecho é incluido só para facilitar testes, crie um elemento qualquer com a class elemento `div.elemento{Olá}`
+  // e de um click nele
+  $('.elemento').adicionaEvento('click', function() { console.log('clicou!') } )
 
 })()
